@@ -9,6 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePosts } from '../entities/post/model/usePosts';
 import { PostCard } from '../entities/post/ui/PostCard';
+import { PostCardSkeleton } from '../entities/post/ui/PostCardSkeleton';
 
 export const FeedScreen = () => {
   const {
@@ -22,9 +23,19 @@ export const FeedScreen = () => {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F5F5' }}>
-        <ActivityIndicator />
-      </View>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F5F5', paddingTop: 8 }}>
+        <View style={{ paddingTop: 12 }}>
+          <View style={{ marginBottom: 20 }}>
+            <PostCardSkeleton />
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <PostCardSkeleton />
+          </View>
+          <View style={{ marginBottom: 20 }}>
+            <PostCardSkeleton />
+          </View>
+        </View>
+      </SafeAreaView>
     );
   }
 

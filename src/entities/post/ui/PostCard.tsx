@@ -1,19 +1,8 @@
 import { View, Text, Image } from 'react-native';
 import { styles } from './PostCard.styles';
-
-type Post = {
-  id: string;
-  tier: 'free' | 'paid';
-  title: string;
-  preview: string;
-  coverUrl?: string;
-  likesCount: number;
-  commentsCount: number;
-  author?: {
-    displayName?: string;
-    avatarUrl?: string;
-  };
-};
+import { Post } from '../model/types';
+import { PostCardHeader } from './PostCardHeader';
+import { PostCardPaid } from './PostCardPaid';
 
 export const PostCard = ({ post }: { post: Post }) => {
   const isPaid = post.tier === 'paid';
@@ -21,19 +10,7 @@ export const PostCard = ({ post }: { post: Post }) => {
   return (
     <View style={styles.card}>
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        {post.author?.avatarUrl && (
-          <Image
-            source={{ uri: post.author.avatarUrl }}
-            style={styles.avatar}
-          />
-        )}
-
-        <Text style={styles.author}>
-          {post.author?.displayName}
-        </Text>
-      </View>
+      <PostCardHeader author={post.author} />
 
       {/* IMAGE FIRST */}
       {!isPaid && post.coverUrl && (
@@ -43,35 +20,7 @@ export const PostCard = ({ post }: { post: Post }) => {
         />
       )}
 
-      {/* PAID BLOCK FULL WIDTH */}
-      {isPaid && (
-        <View style={styles.lockContainer}>
-
-          {post.coverUrl && (
-            <Image
-              source={{ uri: post.coverUrl }}
-              style={styles.lockImage}
-              blurRadius={20}
-            />
-          )}
-
-          <View style={styles.lockOverlay} />
-
-          <View style={styles.lockContent}>
-            <Text style={styles.lockIcon}>💰</Text>
-            <Text style={styles.lockTitle}>
-              Контент скрыт пользователем
-            </Text>
-            <Text style={styles.lockSubtitle}>
-              Доступ откроется после доната
-            </Text>
-
-            <View style={styles.lockButton}>
-              <Text style={styles.lockButtonText}>Отправить донат</Text>
-            </View>
-          </View>
-        </View>
-      )}
+      {isPaid && <PostCardPaid post={post} />}
 
       {isPaid && (
         <View style={styles.content}>
