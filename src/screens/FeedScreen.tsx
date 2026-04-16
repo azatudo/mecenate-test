@@ -1,15 +1,14 @@
 import {
   FlatList,
-  Text,
   View,
   ActivityIndicator,
   RefreshControl,
-  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePosts } from '../entities/post/model/usePosts';
 import { PostCard } from '../entities/post/ui/PostCard';
 import { PostCardSkeleton } from '../entities/post/ui/PostCardSkeleton';
+import { ErrorCard } from '../entities/post/ui/ErrorCard';
 
 export const FeedScreen = () => {
   const {
@@ -41,25 +40,14 @@ export const FeedScreen = () => {
 
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F5F5', padding: 16 }}>
-        <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 16 }}>
-          Не удалось загрузить публикации
-        </Text>
-
-        <Pressable
-          onPress={() => refetch()}
-          style={{
-            backgroundColor: '#6C2BD9',
-            paddingHorizontal: 20,
-            paddingVertical: 12,
-            borderRadius: 12,
-          }}
-        >
-          <Text style={{ color: '#fff', fontWeight: '600' }}>
-            Повторить
-          </Text>
-        </Pressable>
-      </View>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F5F5', paddingTop: 8 }}>
+        <FlatList
+          contentContainerStyle={{ paddingTop: 12 }}
+          data={[]}
+          renderItem={null}
+          ListEmptyComponent={<View style={{ width: '100%' }}><ErrorCard onRetry={refetch} /></View>}
+        />
+      </SafeAreaView>
     );
   }
 
