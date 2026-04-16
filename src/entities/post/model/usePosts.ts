@@ -5,7 +5,8 @@ export const usePosts = () => {
   return useInfiniteQuery({
     queryKey: ['posts'],
     queryFn: getPosts,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+    initialPageParam: null,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.nextCursor : undefined,
   });
 };
