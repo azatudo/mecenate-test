@@ -51,6 +51,12 @@ https://k8s.mectest.ru/test-app
 
 No environment variables are required. The API base URL is hardcoded in the client.
 
+## State management
+
+TanStack Query is used for server state management (data fetching, caching, pagination).
+
+MobX was not used as the application does not require complex client-side state management.
+
 ## Notes
 
 This project was completed as a test assignment.
