@@ -9,7 +9,14 @@ import { usePosts } from '../entities/post/model/usePosts';
 import { PostCard } from '../entities/post/ui/PostCard';
 
 export const FeedScreen = () => {
-  const { data, isLoading, isError, refetch } = usePosts();
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = usePosts();
 
   if (isLoading) return <ActivityIndicator />;
 
@@ -29,8 +36,16 @@ export const FeedScreen = () => {
       data={posts}
       keyExtractor={(item) => String(item.id)}
       renderItem={({ item }) => <PostCard post={item} />}
+      
+      onEndReached={() => fetchNextPage()}
+      onEndReachedThreshold={0.5}
+
       refreshControl={
         <RefreshControl refreshing={false} onRefresh={() => refetch()} />
+      }
+
+      ListFooterComponent={
+        isFetchingNextPage ? <ActivityIndicator /> : null
       }
     />
   );
