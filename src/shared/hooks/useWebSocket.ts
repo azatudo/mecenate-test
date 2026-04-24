@@ -3,12 +3,15 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const WS_URL = 'wss://k8s.mectest.ru/test-app/ws?token=550e8400-e29b-41d4-a716-446655440000';
 
-export const useWebSocket = (postId?: string) => {
+export const useWebSocket = () => {
   const queryClient = useQueryClient();
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
+    let unmounted = false;
+
     const connect = () => {
+      if (wsRef.current) return;
       const ws = new WebSocket(WS_URL);
       wsRef.current = ws;
 
@@ -16,77 +19,84 @@ export const useWebSocket = (postId?: string) => {
         try {
           const msg = JSON.parse(event.data);
 
+          console.log('WS EVENT', msg.type, msg.postId);
+
           if (msg.type === 'like_updated') {
-            if (postId && msg.postId === postId) {
-              queryClient.setQueryData(['post', postId], (old: any) => {
+            ['all', 'free', 'paid'].forEach((filter) => {
+              queryClient.setQueryData(
+                ['posts', filter],
+                (old: any) => {
+                  if (!old?.pages) return old;
+                  return {
+                    ...old,
+                    pages: old.pages.map((page: any) => ({
+                      ...page,
+                      posts: page.posts.map((post: any) =>
+                        post.id === msg.postId
+                          ? {
+                              ...post,
+                              likesCount: msg.likesCount,
+                              isLiked:
+                                typeof msg.isLiked === 'boolean'
+                                  ? msg.isLiked
+                                  : post.isLiked,
+                            }
+                          : post
+                      ),
+                    })),
+                  };
+                }
+              );
+            });
+            queryClient.setQueryData(
+              ['post', msg.postId],
+              (old: any) => {
                 if (!old) return old;
-                return { ...old, likesCount: msg.likesCount };
-              });
-            } else if (!postId) {
-              queryClient.setQueryData(['posts'], (old: any) => {
-                if (!old?.pages) return old;
                 return {
                   ...old,
-                  pages: old.pages.map((page: any) => ({
-                    ...page,
-                    posts: page.posts.map((post: any) =>
-                      post.id === msg.postId
-                        ? { ...post, likesCount: msg.likesCount }
-                        : post
-                    ),
-                  })),
+                  likesCount: msg.likesCount,
+                  isLiked:
+                    typeof msg.isLiked === 'boolean'
+                      ? msg.isLiked
+                      : old.isLiked,
                 };
-              });
-            }
+              }
+            );
           }
 
           if (msg.type === 'comment_added') {
-            if (postId && msg.postId === postId) {
-              queryClient.setQueryData(['comments', postId], (old: any) => {
-                if (!old) return old;
-                const firstPage = old.pages[0];
-                const exists = firstPage.comments.some(
-                  (c: any) => c.id === msg.comment.id
-                );
-                if (exists) return old;
-                return {
-                  ...old,
-                  pages: [
-                    {
-                      ...firstPage,
-                      comments: [msg.comment, ...firstPage.comments],
-                    },
-                    ...old.pages.slice(1),
-                  ],
-                };
-              });
-
-              queryClient.setQueryData(['post', postId], (old: any) => {
+            ['all', 'free', 'paid'].forEach((filter) => {
+              queryClient.setQueryData(
+                ['posts', filter],
+                (old: any) => {
+                  if (!old?.pages) return old;
+                  return {
+                    ...old,
+                    pages: old.pages.map((page: any) => ({
+                      ...page,
+                      posts: page.posts.map((post: any) =>
+                        post.id === msg.postId
+                          ? {
+                              ...post,
+                              commentsCount: post.commentsCount + 1,
+                            }
+                          : post
+                      ),
+                    })),
+                  };
+                }
+              );
+            });
+            queryClient.setQueryData(
+              ['post', msg.postId],
+              (old: any) => {
                 if (!old) return old;
                 return {
                   ...old,
                   commentsCount: old.commentsCount + 1,
                 };
-              });
-            } else if (!postId) {
-              queryClient.setQueryData(['posts'], (old: any) => {
-                if (!old?.pages) return old;
-                return {
-                  ...old,
-                  pages: old.pages.map((page: any) => ({
-                    ...page,
-                    posts: page.posts.map((post: any) =>
-                      post.id === msg.postId
-                        ? {
-                            ...post,
-                            commentsCount: post.commentsCount + 1,
-                          }
-                        : post
-                    ),
-                  })),
-                };
-              });
-            }
+              }
+            );
           }
         } catch (e) {
           console.error('WS parse error', e);
@@ -94,7 +104,11 @@ export const useWebSocket = (postId?: string) => {
       };
 
       ws.onclose = () => {
-        setTimeout(connect, 3000);
+        wsRef.current = null;
+
+        if (!unmounted) {
+          setTimeout(connect, 3000);
+        }
       };
 
       ws.onerror = (e) => {
@@ -106,7 +120,13 @@ export const useWebSocket = (postId?: string) => {
     connect();
 
     return () => {
-      wsRef.current?.close();
+      unmounted = true;
+
+      if (wsRef.current) {
+        wsRef.current.onclose = null;
+        wsRef.current.close();
+        wsRef.current = null;
+      }
     };
-  }, [postId]);
+  }, []);
 };

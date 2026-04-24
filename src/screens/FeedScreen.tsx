@@ -17,7 +17,6 @@ import { ErrorCard } from '../entities/post/ui/ErrorCard';
 import { colors } from '../shared/theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { FeedScreenNavigationProp } from '../navigation/types';
-import { useWebSocket } from '../shared/hooks/useWebSocket';
 
 const TABS: { label: string; value: FeedFilter }[] = [
   { label: 'Все', value: 'all' },
@@ -37,7 +36,7 @@ export const FeedScreen = observer(() => {
     isFetchingNextPage,
   } = usePosts(uiStore.feedFilter);
 
-  useWebSocket();
+  const posts = data?.pages.flatMap((p) => p.posts) ?? [];
 
   const onRefresh = async () => {
     uiStore.setRefreshing(true);
@@ -80,7 +79,8 @@ export const FeedScreen = observer(() => {
         <FlatList
           style={{ flex: 1 }}
           contentContainerStyle={{ paddingTop: 12, paddingBottom: 8 }}
-          data={data?.pages.flatMap((p) => p.posts) ?? []}
+          data={posts}
+          extraData={posts}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <Pressable
