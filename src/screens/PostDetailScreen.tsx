@@ -85,18 +85,18 @@ export const PostDetailScreen = () => {
                 <Text style={styles.backText}>← Назад</Text>
               </Pressable>
 
-              {/* COVER */}
-              {post.coverUrl && (
-                <Image source={{ uri: post.coverUrl }} style={styles.cover} />
-              )}
-
               {/* AUTHOR */}
-              <View style={styles.author}>
+              <View style={styles.authorRow}>
                 {post.author?.avatarUrl && (
                   <Image source={{ uri: post.author.avatarUrl }} style={styles.avatar} />
                 )}
                 <Text style={styles.authorName}>{post.author?.displayName}</Text>
               </View>
+
+              {/* COVER */}
+              {post.coverUrl && (
+                <Image source={{ uri: post.coverUrl }} style={styles.cover} />
+              )}
 
               {/* TITLE */}
               <Text style={styles.title}>{post.title}</Text>
@@ -170,14 +170,11 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: '500',
   },
-  cover: {
-    width: '100%',
-    height: 240,
-  },
-  author: {
+  authorRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
     gap: 8,
   },
   avatar: {
@@ -189,10 +186,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
+  cover: {
+    width: '100%',
+    height: 240,
+  },
   title: {
     fontSize: 20,
     fontWeight: '700',
     paddingHorizontal: 16,
+    marginTop: 12,
     marginBottom: 8,
     color: colors.text,
   },

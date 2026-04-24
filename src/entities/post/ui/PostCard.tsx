@@ -1,11 +1,37 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Animated, Pressable } from 'react-native';
 import { styles } from './PostCard.styles';
 import { Post } from '../model/types';
 import { PostCardHeader } from './PostCardHeader';
 import { PostCardPaid } from './PostCardPaid';
 
+import { useRef } from 'react';
+import * as Haptics from 'expo-haptics';
+import { useToggleLike } from '../model/useToggleLike';
+
 export const PostCard = ({ post }: { post: Post }) => {
   const isPaid = post.tier === 'paid';
+
+  const { mutate: toggleLike } = useToggleLike(post.id);
+  const likeScale = useRef(new Animated.Value(1)).current;
+
+  const handleLike = () => {
+    Animated.sequence([
+      Animated.spring(likeScale, {
+        toValue: 1.4,
+        useNativeDriver: true,
+      }),
+      Animated.spring(likeScale, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    Haptics.impactAsync(
+      Haptics.ImpactFeedbackStyle.Medium
+    );
+
+    toggleLike();
+  };
 
   return (
     <View style={styles.card}>
@@ -40,10 +66,24 @@ export const PostCard = ({ post }: { post: Post }) => {
           </Text>
 
           <View style={styles.footer}>
-            <View style={styles.stat}>
-              <Text style={styles.icon}>❤️</Text>
-              <Text style={styles.count}>{post.likesCount}</Text>
-            </View>
+            <Pressable
+              onPress={(e) => {
+                e.stopPropagation();
+                handleLike();
+              }}
+            >
+              <Animated.View
+                style={[
+                  styles.stat,
+                  { transform: [{ scale: likeScale }] },
+                ]}
+              >
+                <Text style={styles.icon}>
+                  {post.isLiked ? '❤️' : '🤍'}
+                </Text>
+                <Text style={styles.count}>{post.likesCount}</Text>
+              </Animated.View>
+            </Pressable>
 
             <View style={styles.stat}>
               <Text style={styles.icon}>💬</Text>

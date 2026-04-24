@@ -17,6 +17,7 @@ import { ErrorCard } from '../entities/post/ui/ErrorCard';
 import { colors } from '../shared/theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { FeedScreenNavigationProp } from '../navigation/types';
+import { useWebSocket } from '../shared/hooks/useWebSocket';
 
 const TABS: { label: string; value: FeedFilter }[] = [
   { label: 'Все', value: 'all' },
@@ -35,6 +36,8 @@ export const FeedScreen = observer(() => {
     fetchNextPage,
     isFetchingNextPage,
   } = usePosts(uiStore.feedFilter);
+
+  useWebSocket();
 
   const onRefresh = async () => {
     uiStore.setRefreshing(true);
@@ -105,26 +108,34 @@ export const FeedScreen = observer(() => {
 const styles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 8,
-    backgroundColor: colors.surface,
+    marginHorizontal: 5,
+    marginTop: 8,
+    marginBottom: 10,
+    padding: 2,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.tabborder,
+    borderRadius: 18,
   },
   tab: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: colors.border,
+    flex: 1,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
   },
   tabActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.tabbg,
   },
   tabText: {
     fontSize: 13,
     fontWeight: '500',
-    color: colors.muted,
+    color: colors.tabtext,
   },
   tabTextActive: {
-    color: colors.background,
+    color: colors.surface,
+    fontWeight: '500',
   },
+  leftTab: {},
+  rightTab: {},
 });
