@@ -4,13 +4,16 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { observer } from 'mobx-react-lite';
+import { uiStore } from '../shared/store/uiStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePosts } from '../entities/post/model/usePosts';
 import { PostCard } from '../entities/post/ui/PostCard';
 import { PostCardSkeleton } from '../entities/post/ui/PostCardSkeleton';
 import { ErrorCard } from '../entities/post/ui/ErrorCard';
+import { colors } from '../shared/theme/colors';
 
-export const FeedScreen = () => {
+export const FeedScreen = observer(() => {
   const {
     data,
     isLoading,
@@ -20,9 +23,15 @@ export const FeedScreen = () => {
     isFetchingNextPage,
   } = usePosts();
 
+  const onRefresh = async () => {
+    uiStore.setRefreshing(true);
+    await refetch();
+    uiStore.setRefreshing(false);
+  };
+
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F5F5', paddingTop: 8 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, paddingTop: 8 }}>
         <View style={{ paddingTop: 12 }}>
           <View style={{ marginBottom: 20 }}>
             <PostCardSkeleton />
@@ -40,12 +49,12 @@ export const FeedScreen = () => {
 
   if (isError) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F5F5', paddingTop: 8 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, paddingTop: 8 }}>
         <FlatList
-          contentContainerStyle={{ paddingTop: 12 }}
+          contentContainerStyle={{ paddingTop: 12, alignItems: 'stretch' }}
           data={[]}
           renderItem={null}
-          ListEmptyComponent={<View style={{ width: '100%' }}><ErrorCard onRetry={refetch} /></View>}
+          ListEmptyComponent={<ErrorCard onRetry={refetch} />}
         />
       </SafeAreaView>
     );
@@ -54,7 +63,7 @@ export const FeedScreen = () => {
   const posts = data?.pages.flatMap((p) => p.posts) ?? [];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F5F5', paddingTop: 8 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, paddingTop: 8 }}>
       <FlatList
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingTop: 12, paddingBottom: 8 }}
@@ -68,7 +77,7 @@ export const FeedScreen = () => {
         onEndReached={() => fetchNextPage()}
         onEndReachedThreshold={0.5}
         refreshControl={
-          <RefreshControl refreshing={false} onRefresh={() => refetch()} />
+          <RefreshControl refreshing={uiStore.refreshing} onRefresh={onRefresh} />
         }
         ListFooterComponent={
           isFetchingNextPage ? <ActivityIndicator /> : null
@@ -76,4 +85,4 @@ export const FeedScreen = () => {
       />
     </SafeAreaView>
   );
-};
+});

@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import { colors } from '../../../shared/theme/colors';
 
 export const ErrorCard = ({ onRetry }: { onRetry: () => void }) => {
   return (
@@ -11,7 +12,7 @@ export const ErrorCard = ({ onRetry }: { onRetry: () => void }) => {
       />
 
       <Text style={styles.title}>
-        Не удалось загрузить публикацию
+        Не удалось загрузить публикации
       </Text>
 
       <Pressable style={styles.button} onPress={onRetry}>
@@ -23,7 +24,7 @@ export const ErrorCard = ({ onRetry }: { onRetry: () => void }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     width: '100%',
     alignSelf: 'stretch',
     paddingVertical: 24,
@@ -45,14 +46,14 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#6C2BD9',
+    backgroundColor: colors.primary,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,
   },
 
   buttonText: {
-    color: '#fff',
+    color: colors.background,
     fontWeight: '600',
   },
 });

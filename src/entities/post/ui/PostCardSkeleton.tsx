@@ -12,7 +12,7 @@ export const PostCardSkeleton = () => {
             width: 36,
             height: 36,
             borderRadius: 18,
-            backgroundColor: '#E5E5EA',
+            backgroundColor: 'colors.background',
           }}
         />
         <View
@@ -20,7 +20,7 @@ export const PostCardSkeleton = () => {
             width: 120,
             height: 14,
             borderRadius: 6,
-            backgroundColor: '#E5E5EA',
+            backgroundColor: 'colors.background',
           }}
         />
       </View>
@@ -30,7 +30,7 @@ export const PostCardSkeleton = () => {
         style={{
           width: '100%',
           height: 240,
-          backgroundColor: '#E5E5EA',
+          backgroundColor: 'colors.background',
         }}
       />
 
@@ -40,7 +40,7 @@ export const PostCardSkeleton = () => {
           style={{
             height: 16,
             width: '60%',
-            backgroundColor: '#E5E5EA',
+            backgroundColor: 'colors.background',
             borderRadius: 8,
             marginBottom: 8,
           }}
@@ -49,7 +49,7 @@ export const PostCardSkeleton = () => {
           style={{
             height: 14,
             width: '100%',
-            backgroundColor: '#E5E5EA',
+            backgroundColor: 'colors.background',
             borderRadius: 8,
             marginBottom: 6,
           }}
@@ -58,7 +58,7 @@ export const PostCardSkeleton = () => {
           style={{
             height: 14,
             width: '70%',
-            backgroundColor: '#E5E5EA',
+            backgroundColor: 'colors.background',
             borderRadius: 8,
           }}
         />

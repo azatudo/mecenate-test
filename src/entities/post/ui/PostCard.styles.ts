@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../shared/theme/colors';
 
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     width: '100%',
     marginHorizontal: 0,
   },
@@ -32,11 +33,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 4,
-    color: '#000',
+    color: colors.text,
   },
   description: {
     fontSize: 14,
-    color: '#333',
+    color: colors.muted,
     marginBottom: 8,
   },
   footer: {
@@ -51,7 +52,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     height: 36,
     borderRadius: 9999,
-    backgroundColor: '#EFEFF4',
+    backgroundColor: colors.border,
   },
   icon: {
     fontSize: 14,
@@ -66,7 +67,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     overflow: 'hidden',
-    backgroundColor: '#999',
+    backgroundColor: colors.muted,
   },
   lockImage: {
     position: 'absolute',
@@ -81,56 +82,62 @@ export const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.35)',
   },
-  lockContent: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-  },
   lockIcon: {
     fontSize: 24,
   },
   lockTitle: {
     fontSize: 15,
-    color: '#fff',
+    color: colors.background,
     fontWeight: '600',
   },
   lockSubtitle: {
     fontSize: 12,
-    color: '#ddd',
+    color: colors.muted,
     textAlign: 'center',
   },
   lockButton: {
     marginTop: 12,
-    backgroundColor: '#6C2BD9',
+    backgroundColor: colors.primary,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 12,
   },
   lockButtonText: {
-    color: '#fff',
+    color: colors.background,
     fontSize: 13,
     fontWeight: '500',
   },
   skeletonTitle: {
     height: 16,
     width: '60%',
-    backgroundColor: '#E5E5EA',
+    backgroundColor: colors.border,
     borderRadius: 8,
     marginBottom: 8,
   },
   skeletonLine: {
     height: 14,
     width: '100%',
-    backgroundColor: '#E5E5EA',
+    backgroundColor: colors.border,
     borderRadius: 8,
     marginBottom: 6,
   },
   skeletonLineShort: {
     height: 14,
     width: '70%',
-    backgroundColor: '#E5E5EA',
+    backgroundColor: colors.border,
     borderRadius: 8,
+  },
+  contentWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  centerContent: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  skeletonWrapper: {
+    marginTop: 24,
+    opacity: 0.25,
   },
 });

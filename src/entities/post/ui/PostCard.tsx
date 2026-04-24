@@ -22,13 +22,6 @@ export const PostCard = ({ post }: { post: Post }) => {
 
       {isPaid && <PostCardPaid post={post} />}
 
-      {isPaid && (
-        <View style={styles.content}>
-          <View style={styles.skeletonTitle} />
-          <View style={styles.skeletonLine} />
-          <View style={styles.skeletonLineShort} />
-        </View>
-      )}
 
       {/* CONTENT UNDER IMAGE (only for free) */}
       {!isPaid && (
