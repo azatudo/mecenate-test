@@ -127,17 +127,4 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.border,
     borderRadius: 8,
   },
-  contentWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
-  centerContent: {
-    alignItems: 'center',
-    gap: 8,
-  },
-  skeletonWrapper: {
-    marginTop: 24,
-    opacity: 0.25,
-  },
 });

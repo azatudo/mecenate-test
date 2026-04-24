@@ -12,7 +12,6 @@ export const PostCard = ({ post }: { post: Post }) => {
 
       <PostCardHeader author={post.author} />
 
-      {/* IMAGE FIRST */}
       {!isPaid && post.coverUrl && (
         <Image
           source={{ uri: post.coverUrl }}
@@ -22,8 +21,14 @@ export const PostCard = ({ post }: { post: Post }) => {
 
       {isPaid && <PostCardPaid post={post} />}
 
+      {isPaid && (
+        <View style={styles.content}>
+          <View style={styles.skeletonTitle} />
+          <View style={styles.skeletonLine} />
+          <View style={styles.skeletonLineShort} />
+        </View>
+      )}
 
-      {/* CONTENT UNDER IMAGE (only for free) */}
       {!isPaid && (
         <View style={styles.content}>
           <Text style={styles.title} numberOfLines={2}>
@@ -34,7 +39,6 @@ export const PostCard = ({ post }: { post: Post }) => {
             {post.preview}
           </Text>
 
-          {/* FOOTER */}
           <View style={styles.footer}>
             <View style={styles.stat}>
               <Text style={styles.icon}>❤️</Text>
