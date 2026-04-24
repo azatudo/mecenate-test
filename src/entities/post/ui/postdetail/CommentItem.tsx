@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 4,
+    marginBottom: 1,
     alignItems: 'center',
   },
 
